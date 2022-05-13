@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/underscore@1.13.3/underscore-umd-min.js"></script>
+    <script src="dirPagination.js"></script>
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body ng-app="myApp" ng-controller="myController">
+
+    <!-- //tab ******************************************************************************************* tab\\ -->
+    <section>
+        <ul>
+            <li class="liTab liHocSinh">
+                <a href ng-click="chuyenTabHocSinh()">Hoc Sinh</a>
+            </li>
+            <li class="liTab liLop">
+                <a href ng-click="chuyenTabLop()">Lop</a>
+            </li>
+        </ul>
+    </section>
+
+     <!-- //tab Hoc Sinh ************************************************************************* tab Hoc Sinh\\ -->
+    <section>
+        <div ng-show="tabHocSinh">
+            <input type="text" placeholder="Ho ten" ng-model="duLieuVaoNutTimKiem.hoTen">
+            <input type="number" placeholder="Tuoi" ng-model="duLieuVaoNutTimKiem.tuoi">
+
+            <select ng-model="duLieuVaoNutTimKiem.lop">
+                <option ng-repeat="chonLopHoc in danhSachTimKiemLop">{{chonLopHoc}}</option>
+            </select>
+
+            <button ng-click="timKiem()">Tim kiem</button>
+            <button ng-click="themHocSinh()">Them hoc sinh</button>
+
+            <table border="1" width="731px">
+                <tr>
+                    <td>#</td>
+                    <td>Ho va ten</td>
+                    <td>Tuoi</td>
+                    <td>Lop</td>
+                    <td>Thao tac</td>
+                </tr>
+                <tr dir-paginate="hs in hocSinh|itemsPerPage:5">
+                    <td>{{$index + 1}}</td>
+                    <td width=40%>{{hs.hoTen}}</td>
+                    <td>{{tinhTuoi(hs.tuoi)}}</td>
+                    <td>{{hs.lop}}</td>
+                    <td align="center" width="100px">
+                        <button ng-click="suaHocSinh(hs)">Sua</button>
+                        <button ng-click="xoaHocSinh(hs)">Xoa</button>
+                    </td>
+                </tr>
+            </table>
+
+            <dir-pagination-controls class="dir" max-size="5" direction-links="true" boundary-links="true">
+            </dir-pagination-controls>
+
+        </div>
+
+        <div ng-hide="tabThemHocSinh">
+
+            <h1>Them hoc sinh</h1>
+
+            <input type="text" placeholder="Ho ten" ng-model="hoTen"><br>
+            <input style="width : 165px" type="date" ng-model="tuoi"><br>
+
+            <select ng-model="lop">
+                <option ng-repeat="lop in danhSachChonThemSua">{{lop}}</option>
+            </select>
+
+            <button ng-click="luuThemHocSinh(hoTen, tuoi, lop)">Luu</button>
+
+        </div>
+
+        <div ng-hide="tabSuaHocSinh">
+
+            <h1>Sua hoc sinh</h1>
+
+            <input type="text" ng-model="hs.hoTen"><br>
+            <input type="date" ng-model="hs.tuoi"><br>
+
+            <select ng-model="hs.lop">
+                <option ng-repeat="lop in danhSachChonThemSua">{{lop}}</option>
+            </select>
+
+            <button ng-click="luuSuaHocSinh()">Luu</button>
+
+        </div>
+    </section>
+
+    <!-- tab Lop *********************************************************************************** tab Lop\\ -->
+    <section>
+        <div ng-hide="tabLop">
+
+            <button ng-click="themLop()"">Tao lop</button>
+
+            <table border=" 1" width="700px">
+                <tr>
+                    <td>#</td>
+                    <td width="70%">Lop</td>
+                    <td>Thao tac</td>
+                </tr>
+                <tr dir-paginate="lop in lopThuoc |itemsPerPage:5">
+                    <td>{{$index + 1}}</td>
+                    <td>{{lop.tenLop}}</td>
+                    <td align="center">
+                        <button ng-click="suaLop(lop)">Sua</button>
+                        <button ng-click="xoaLop(lop)">Xoa</button>
+                    </td>
+                </tr>
+                </table>
+
+                <dir-pagination-controls class="dir" max-size="5" direction-links="true" boundary-links="true">
+                </dir-pagination-controls>
+
+        </div>
+        <div ng-hide="tabThemLop">
+
+            <h1>Them lop</h1>
+
+            Ten lop:<input type="text" ng-model="tenLop" placeholder="Lop10A1"><br>
+
+            Thuoc: &nbsp<select ng-model="thuoc">
+                <option ng-repeat="khoi in khoi">{{khoi}}</option>
+            </select>
+
+            <button ng-click="luuThemLop(tenLop, thuoc)">Luu</button>
+
+        </div>
+
+        <div ng-hide="tabSuaLop">
+
+            <h1>Sua lop</h1>
+
+            Ten lop:<input type="text" ng-model="lop.tenLop" placeholder="Lop10A1"><br>
+
+            Thuoc: &nbsp<select ng-model="lop.thuoc">
+                <option ng-repeat="khoi in khoi">{{khoi}}</option>
+            </select>
+
+            <button ng-click="luuSuaLop()">Luu</button>
+
+        </div>
+    </section>
+
+</body>
+
+</html>
